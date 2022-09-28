@@ -1,9 +1,37 @@
-import type { NextPage } from 'next';
 import Head from 'next/head';
 import Header from '../components/Header';
 import Banner from './Banner';
+import { sanityClient } from '../sanity';
+import { Post } from '../typings';
+import Posts from '../components/Posts';
 
-const Home: NextPage = () => {
+export const getServerSideProps = async () => {
+  const query = `*[_type == "post"] {
+    _id,
+    title,
+    slug,
+    author -> {
+      name,
+      image
+    },
+    mainImage,
+    description
+    }`;
+
+  const posts = await sanityClient.fetch(query);
+
+  return {
+    props: {
+      posts,
+    },
+  };
+};
+
+interface Props {
+  posts: Post[];
+}
+
+const Home = ({ posts }: Props) => {
   return (
     <div className='max-w-7xl mx-auto'>
       <Head>
@@ -14,6 +42,7 @@ const Home: NextPage = () => {
 
       <Header />
       <Banner />
+      <Posts posts={posts} />
     </div>
   );
 };
