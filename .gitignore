@@ -2,6 +2,7 @@
 
 # dependencies
 /sanity-medium-clone-backend/node_modules
+/sanity-medium-clone-backend/dist
 /node_modules
 /.pnp
 .pnp.js
